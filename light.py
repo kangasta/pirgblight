@@ -60,7 +60,7 @@ class PiRgbLight(Light):
         self._h, self._s, self._l = [h / 360.0, s / 100.0, l / 255.0]
 
         r,g,b = hls_to_rgb(self._h, self._l, self._s)
-        post(self._url + '/color', data={
+        post(self._url + '/color', json={
             'red': r * 255.0,
             'green': g * 255.0,
             'blue': b * 255.0
