@@ -14,14 +14,14 @@ from homeassistant.const import CONF_HOST, CONF_PORT
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
-    vol.Optional(CONF_PORT, default='8080'): cv.port
+    vol.Optional(CONF_PORT, default=8080): cv.port
 })
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     host = config[CONF_HOST]
     port = config[CONF_PORT]
 
-    add_entities(PiRgbLight(host, port))
+    add_entities([PiRgbLight(host, port)])
 
 from requests import get, post
 from colorsys import hls_to_rgb, rgb_to_hls
