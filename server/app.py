@@ -25,9 +25,9 @@ def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21
 				]}), 400
 
 			rgb = (
-				json_in['red'],
-				json_in['green'],
-				json_in['blue']
+				json_in.get('red', 0),
+				json_in.get('green', 0),
+				json_in.get('blue', 0)
 			)
 			led.color = rgb
 
