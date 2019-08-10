@@ -14,7 +14,7 @@ from homeassistant.const import CONF_HOST, CONF_PORT
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
-    vol.Optional(CONF_PORT, default='8080'): cv.number
+    vol.Optional(CONF_PORT, default='8080'): cv.port
 })
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
