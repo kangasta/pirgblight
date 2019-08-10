@@ -4,7 +4,7 @@ from pirgbled import PiRGBLed
 
 def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21):
 	app = Flask(__name__)
-	led = RGBLed(r_pin, g_pin, b_pin)
+	led = PiRGBLed(r_pin, g_pin, b_pin)
 
 	@app.route('/color', methods=['GET', 'POST'])
 	def color():
@@ -19,6 +19,11 @@ def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21
 		if request.method == 'POST':
 			json_in = request.get_json()
 
+			if not json_in:
+				return jsonify({'errors': [
+					'Could not read body'
+				]}), 400
+
 			rgb = (
 				json_in['red'],
 				json_in['green'],
@@ -26,7 +31,7 @@ def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21
 			)
 			led.color = rgb
 
-			return ('', 204)
+			return '', 204
 
 	@app.route('/info', methods=['GET'])
 	def info():
