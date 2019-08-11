@@ -24,14 +24,14 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities([PiRgbLight(host, port)])
 
 from requests import get, post
-from colorsys import hls_to_rgb, rgb_to_hls
+from colorsys import hsv_to_rgb, rgb_to_hsv
 
 class PiRgbLight(Light):
     def __init__(self, host, port):
         self._url = "http://{host}:{port}".format(host=host, port=port)
         self._h = 0
         self._s = 0
-        self._l = 0
+        self._v = 0
         self._on = False
         self._name = None
 
@@ -49,7 +49,7 @@ class PiRgbLight(Light):
 
     @property
     def brightness(self):
-        return self._l * 255
+        return self._v * 255
 
     @property
     def hs_color(self):
@@ -58,12 +58,12 @@ class PiRgbLight(Light):
     def turn_on(self, **kwargs):
         self._on = True
 
-        l = kwargs.get(ATTR_BRIGHTNESS, self._l * 255)
+        v = kwargs.get(ATTR_BRIGHTNESS, self._v * 255)
         h, s = kwargs.get(ATTR_HS_COLOR, [self._h * 360, self._s * 100])
 
-        self._h, self._s, self._l = [h / 360.0, s / 100.0, l / 255.0]
+        self._h, self._s, self._v = [h / 360.0, s / 100.0, v / 255.0]
 
-        r,g,b = hls_to_rgb(self._h, self._l, self._s)
+        r,g,b = hsv_to_rgb(self._h, self._s, self._v)
         post(self._url + '/color', json={
             'red': r * 255.0,
             'green': g * 255.0,
@@ -88,4 +88,4 @@ class PiRgbLight(Light):
             data.get('blue', 0) / 255.0,
         )
 
-        self._h, self._l, self._s = rgb_to_hls(*rgb)
+        self._h, self._s, self._v = rgb_to_hsv(*rgb)
