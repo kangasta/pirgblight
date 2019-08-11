@@ -73,7 +73,11 @@ class PiRgbLight(Light):
     def turn_off(self, **kwargs):
         self._on = False
 
-        post(self._url + '/color', json={})
+        post(self._url + '/color', json={
+            'red': 0,
+            'green': 0,
+            'blue': 0
+        })
 
     def update(self):
         r = get(self._url + '/info')
