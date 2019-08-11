@@ -32,6 +32,7 @@ class PiRgbLight(Light):
         self._h = 0
         self._s = 0
         self._l = 0
+        self._on = False
         self._name = None
 
     @property
@@ -44,7 +45,7 @@ class PiRgbLight(Light):
 
     @property
     def is_on(self):
-        return self._l > 0
+        return self._on
 
     @property
     def brightness(self):
@@ -55,8 +56,11 @@ class PiRgbLight(Light):
         return [self._h * 360, self._s * 100]
 
     def turn_on(self, **kwargs):
-        l = kwargs.get(ATTR_BRIGHTNESS, 0) 
-        h, s = kwargs.get(ATTR_HS_COLOR, [0.0,0.0])
+        self._on = True
+
+        l = kwargs.get(ATTR_BRIGHTNESS, self._l * 255)
+        h, s = kwargs.get(ATTR_HS_COLOR, [self._h * 360, self._s * 100])
+
         self._h, self._s, self._l = [h / 360.0, s / 100.0, l / 255.0]
 
         r,g,b = hls_to_rgb(self._h, self._l, self._s)
@@ -67,7 +71,9 @@ class PiRgbLight(Light):
         })
 
     def turn_off(self, **kwargs):
-        self._l = 0
+        self._on = False
+
+        post(self._url + '/color', json={})
 
     def update(self):
         r = get(self._url + '/info')
