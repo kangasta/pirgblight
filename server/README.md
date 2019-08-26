@@ -18,17 +18,17 @@ N = 10
 fade_in_out = lambda n: ((1 - cos(i / n * 2 * pi)) / 2.0 * 255 for i in range(n + 1))
 
 for brightness in fade_in_out(N):
-	post('http://localhost:8080/color', json={
-		"red": brightness,
-		"green": brightness,
-		"blue": brightness
-	})
-	sleep(T / float(N))
+    post('http://localhost:8080/color', json={
+        "red": brightness,
+        "green": brightness,
+        "blue": brightness
+    })
+    sleep(T / float(N))
 
 for component in ('red', 'green', 'blue',):
-	for brightness in fade_in_out(N):
-		post('http://localhost:8080/color', json={
-			component: brightness
-		})
-		sleep(T / float(N))
+    for brightness in fade_in_out(N):
+        post('http://localhost:8080/color', json={
+            component: brightness
+        })
+        sleep(T / float(N))
 ```
