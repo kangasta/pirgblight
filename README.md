@@ -97,3 +97,18 @@ Home assistant automations to follow state of an another light:
   - service: light.turn_off
     entity_id: light.follower
 ```
+
+## Testing
+
+Run unit tests with commands:
+
+```bash
+python3 -m unittest discover -s tst/
+```
+
+Get test coverage with commands:
+
+```bash
+coverage run --source ./ -m unittest discover -s tst/
+coverage report -m
+```

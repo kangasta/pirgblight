@@ -1,7 +1,7 @@
 import os
 import pigpio
 
-class PiRGBLed(object):
+class PiRGBLight(object):
 	def __init__(self, r_pin=19, g_pin=20, b_pin=21):
 		self._pins = (r_pin, g_pin, b_pin)
 		self._pi = pigpio.pi()

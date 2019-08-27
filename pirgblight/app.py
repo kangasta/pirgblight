@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 
-from .pirgbled import PiRGBLed
+from .pirgblight import PiRGBLight
 
 def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21):
 	app = Flask(__name__)
-	led = PiRGBLed(r_pin, g_pin, b_pin)
+	led = PiRGBLight(r_pin, g_pin, b_pin)
 
 	@app.route('/color', methods=['GET', 'POST'])
 	def color():
