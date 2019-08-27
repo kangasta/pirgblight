@@ -100,6 +100,12 @@ Home assistant automations to follow state of an another light:
 
 ## Testing
 
+Run static code analysis with command:
+
+```bash
+pylint light.py bin/* pirgblight/ tst/
+```
+
 Run unit tests with commands:
 
 ```bash

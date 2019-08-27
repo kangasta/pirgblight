@@ -10,8 +10,8 @@ class PiRgbLedTest(TestCase):
         pi = MagicMock()
         mock.return_value = pi
 
-        pins = (1,2,3,)
-        rgb = (4,5,6,)
+        pins = (1, 2, 3,)
+        rgb = (4, 5, 6,)
 
         led = PiRGBLight(*pins)
         led.color = rgb
