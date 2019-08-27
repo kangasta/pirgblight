@@ -1,0 +1,66 @@
+#!/usr/bin/python3
+from argparse import ArgumentParser
+from gunicorn.app.base import BaseApplication
+
+from pirgblight import generate_app
+
+def generate_arg_parser():
+    parser = ArgumentParser()
+
+    parser.add_argument("--pins",
+        help="Pin numbers for R, G, and B",
+        default=(19, 20, 21,),
+        type=int,
+        nargs=3,
+        metavar=("R","G","B"))
+    parser.add_argument("--name",
+        help="name of the light",
+        default="pirgblight",
+        type=str)
+    parser.add_argument("--location",
+        help="location of the light",
+        default=None,
+        type=str)
+    parser.add_argument("--host",
+        help="hosts to serve to (default = 0.0.0.0)",
+        default="0.0.0.0",
+        type=str)
+    parser.add_argument("-p","--port",
+        help="port to serve from (default = 8080)",
+        default=8080,
+        type=int)
+    parser.add_argument("-w","--workers",
+        help="number of worker processes (default = 3)",
+        default=3,
+        type=int)
+
+    return parser
+
+class PiRgbLedApplication(BaseApplication):
+    def __init__(self, app, options=None):
+        self._options = options or {}
+        self._app = app
+
+        super().__init__()
+
+    def load_config(self):
+        for key, value in self._options.items():
+            if key in self.cfg.settings and value is not None:
+                self.cfg.set(key.lower(), value)
+
+    def load(self):
+        return self._app
+
+def main():
+    parser = generate_arg_parser()
+    args = parser.parse_args()
+
+    app = generate_app(args.name, args.location, *args.pins)
+    options = {
+        'bind': '{host}:{port}'.format(host=args.host, port=args.port),
+        'workers': args.workers,
+    }
+
+    PiRgbLedApplication(app, options).run()
+
+main()
