@@ -1,5 +1,7 @@
 # pirgblight
 
+[![Build Status](https://travis-ci.org/kangasta/pirgblight.svg?branch=master)](https://travis-ci.org/kangasta/pirgblight)
+
 Server and Home Assistant integration for controlling RGB light via remote Raspberry Pi.
 
 ## Usage
