@@ -117,6 +117,6 @@ python3 -m unittest discover -s tst/
 Get test coverage with commands:
 
 ```bash
-coverage run --source ./ -m unittest discover -s tst/
+coverage run --source ./ --omit setup.py -m unittest discover tst/
 coverage report -m
 ```

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pigpio
 from pirgblight import generate_app
 
-def to_color_body(r,g,b):
+def to_color_body(r, g, b):
     return {
         'red': r,
         'green': g,

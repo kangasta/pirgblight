@@ -7,5 +7,5 @@ python:
 install:
 - pip install -r requirements.txt
 script:
-- coverage run --source ./ -m unittest discover -s tst/
+- coverage run --source ./ --omit setup.py -m unittest discover tst/
 - coverage report -m
