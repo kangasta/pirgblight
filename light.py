@@ -63,7 +63,7 @@ class PiRgbLight(Light):
 
         self._h, self._s, self._v = [h / 360.0, s / 100.0, v / 255.0]
 
-        r,g,b = hsv_to_rgb(self._h, self._s, self._v)
+        r, g, b = hsv_to_rgb(self._h, self._s, self._v)
         post(self._url + '/color', json={
             'red': r * 255.0,
             'green': g * 255.0,
