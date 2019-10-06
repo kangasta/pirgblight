@@ -16,9 +16,10 @@ setuptools.setup(
 	packages=setuptools.find_packages(),
 	scripts=["bin/pirgblight-server"],
 	install_requires=[
-		'flask',
-		'gunicorn',
-		'pigpio',
+		'flask>=1.1.1',
+		'gunicorn>=19.9.0',
+		'pigpio>=1.44',
+		'requests>=2.22.0'
 	],
 	classifiers=(
 		"Programming Language :: Python :: 3",
