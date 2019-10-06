@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pigpio
 from pirgblight import PiRGBLight
 
-class PiRgbLedTest(TestCase):
+class PiRgbLightTest(TestCase):
     @patch.object(pigpio, 'pi')
     def test_allows_custom_pins(self, mock):
         pi = MagicMock()

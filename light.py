@@ -23,12 +23,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     add_entities([PiRgbLight(host, port)])
 
-from requests import get, post
-from colorsys import hsv_to_rgb, rgb_to_hsv
+from .pirgblight import ClientRGBLight
 
 class PiRgbLight(Light):
     def __init__(self, host, port):
-        self._url = "http://{host}:{port}".format(host=host, port=port)
+        self._client = ClientRGBLight(host, port)
         self._h = 0
         self._s = 0
         self._v = 0
@@ -63,33 +62,13 @@ class PiRgbLight(Light):
 
         self._h, self._s, self._v = [h / 360.0, s / 100.0, v / 255.0]
 
-        r, g, b = hsv_to_rgb(self._h, self._s, self._v)
-        post(self._url + '/color', json={
-            'red': r * 255.0,
-            'green': g * 255.0,
-            'blue': b * 255.0
-        })
+        self._client.hsv_color = (self._h, self._s, self._v,)
 
     def turn_off(self, **kwargs):
         self._on = False
-
-        post(self._url + '/color', json={
-            'red': 0,
-            'green': 0,
-            'blue': 0
-        })
+        self._client.hsv_color = (0, 0, 0,)
 
     def update(self):
-        r = get(self._url + '/info')
-        self._name = r.json()['name']
+        self._client.info['name']
 
-        r = get(self._url + '/color')
-        data = r.json()
-
-        rgb = (
-            data.get('red', 0) / 255.0,
-            data.get('green', 0) / 255.0,
-            data.get('blue', 0) / 255.0,
-        )
-
-        self._h, self._s, self._v = rgb_to_hsv(*rgb)
+        self._h, self._s, self._v = self._client.hsv_color
