@@ -4,6 +4,8 @@
 
 Server and Home Assistant integration for controlling RGB light via remote Raspberry Pi.
 
+![Red, green, and blue LEDs connected to Raspberry Pi Zero](./img/preview.jpg)
+
 ## Usage
 
 Start the server on your rasperry pi where RGB LED is connected to GPIO pins with command:
