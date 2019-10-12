@@ -10,29 +10,31 @@ from homeassistant.components.light import (
     Light
 )
 
-from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
-    vol.Optional(CONF_PORT, default=8080): cv.port
+    vol.Optional(CONF_PORT, default=8080): cv.port,
+    vol.Optional(CONF_NAME): cv.string,
 })
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    host = config[CONF_HOST]
-    port = config[CONF_PORT]
+    host = config.get(CONF_HOST)
+    port = config.get(CONF_PORT)
+    name = config.get(CONF_NAME)
 
-    add_entities([PiRgbLight(host, port)])
+    add_entities([PiRgbLight(host, port, name)])
 
 from .pirgblight import ClientRGBLight
 
 class PiRgbLight(Light):
-    def __init__(self, host, port):
+    def __init__(self, host, port, name=None):
         self._client = ClientRGBLight(host, port)
         self._h = 0
         self._s = 0
         self._v = 0
         self._on = False
-        self._name = None
+        self._name = name
 
     @property
     def name(self):
@@ -69,6 +71,7 @@ class PiRgbLight(Light):
         self._client.hsv_color = (0, 0, 0,)
 
     def update(self):
-        self._client.info['name']
+        if not self._name:
+            self._name = self._client.info['name']
 
         self._h, self._s, self._v = self._client.hsv_color
