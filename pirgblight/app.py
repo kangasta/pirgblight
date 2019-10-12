@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 
+from ._utils import rgb_tuple_to_json, json_to_rgb_tuple
 from .pirgblight import PiRGBLight
 
 def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21):
@@ -9,13 +10,7 @@ def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21
     @app.route('/color', methods=['GET', 'POST'])
     def color():
         if request.method == 'GET':
-            r, g, b = led.color
-
-            return jsonify({
-                "red": r,
-                "green": g,
-                "blue": b,
-            })
+            return jsonify(rgb_tuple_to_json(led.color))
         if request.method == 'POST':
             json_in = request.get_json()
 
@@ -24,12 +19,7 @@ def generate_app(name='ColorSwitch', location=None, r_pin=19, g_pin=20, b_pin=21
                     'Could not read body'
                 ]}), 400
 
-            rgb = (
-                json_in.get('red', 0),
-                json_in.get('green', 0),
-                json_in.get('blue', 0)
-            )
-            led.color = rgb
+            led.color = json_to_rgb_tuple(json_in)
 
             return '', 204
 
