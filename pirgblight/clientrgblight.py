@@ -1,5 +1,6 @@
 from requests import get, post
 
+from ._utils import rgb_tuple_to_json, json_to_rgb_tuple
 from .rgblight import RGBLight
 
 class ClientRGBLight(RGBLight):
@@ -11,21 +12,11 @@ class ClientRGBLight(RGBLight):
         r = get(self._url + '/color')
         data = r.json()
 
-        return (
-            data.get('red', 0),
-            data.get('green', 0),
-            data.get('blue', 0),
-        )
+        return json_to_rgb_tuple(data)
 
     @color.setter
     def color(self, rgb):
-        r, g, b = rgb
-
-        post(self._url + '/color', json={
-            'red': r,
-            'green': g,
-            'blue': b,
-        })
+        post(self._url + '/color', json=rgb_tuple_to_json(rgb))
 
     @property
     def info(self):
